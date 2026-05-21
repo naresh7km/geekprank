@@ -456,13 +456,28 @@
         margin-top: 10px;
       }
 
+      /* Dark backdrop behind the restart modal (shown before fullscreen) */
+      #restartBackdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 99997;
+      }
+      #restartBackdrop.active {
+        display: block;
+      }
+
       /* XP-themed restart notification popup */
       #restartNotice {
         display: none;
         position: fixed;
-        top: 16px;
+        top: 50%;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
         width: 380px;
         z-index: 99998;
         background: #ece9d8;
@@ -479,11 +494,11 @@
       }
       @keyframes rnDrop {
         from {
-          transform: translate(-50%, -20px);
+          transform: translate(-50%, calc(-50% - 20px));
           opacity: 0;
         }
         to {
-          transform: translate(-50%, 0);
+          transform: translate(-50%, -50%);
           opacity: 1;
         }
       }
@@ -910,7 +925,7 @@
         <div id="youtubeIframe"></div>
       </div>
       <div class="window" title="welcome" id="welcomeWindow">
-        <h2><span></span>Windows セキュリティ センター - 緊急の警告</h2>
+        <h2><span></span>Internet Explorer - アプリケーション エラー</h2>
         <ul class="window_control">
           <li class="min">
             <a title="最小化"><span></span>最小化</a>
@@ -1012,28 +1027,28 @@
                           src="https://geekprank.com/images/ico/wait.png"
                           alt="caution ico"
                         />
-                        作業中のファイルを保存
+                        開いているタブを保存
                       </li>
                       <li>
                         <img
                           src="https://geekprank.com/images/ico/close.png"
                           alt="close ico"
                         />
-                        実行中のプログラムを終了
+                        問題のあるアドオンを無効化
                       </li>
                       <li>
                         <img
                           src="https://geekprank.com/images/ico/screen.png"
                           alt="restart ico"
                         />
-                        コンピュータを再起動
+                        Internet Explorer を再起動
                       </li>
                       <li>
                         <img
                           src="https://geekprank.com/images/ico/pc.png"
                           alt="scan ico"
                         />
-                        セーフ モードでウイルス スキャン
+                        閲覧履歴とキャッシュをクリア
                       </li>
                       <li>
                         <img
@@ -1053,39 +1068,38 @@
                       <div class="crashErrorHeader">
                         <span class="crashIcon">&#9888;</span>
                         <h1>
-                          システム エラー:
-                          コンピュータがウイルスに感染しています
+                          Internet Explorer は動作を停止しました
                         </h1>
                       </div>
 
                       <p class="crashIntro">
-                        <strong>重大な問題が検出されました。</strong>
-                        ハードウェアおよびソフトウェアに深刻な障害が発生したため、Windows
-                        は通常の動作を継続できません。コンピュータを保護するためにシステムを一時停止しました。
+                        <strong>重大なエラーが発生しました。</strong>
+                        Internet Explorer
+                        で問題が発生し、ブラウザは動作を継続できません。ブラウザを再起動すると、前回のセッションの復元が試みられます。
                       </p>
 
                       <div class="crashBox">
-                        <h3>検出された脅威:</h3>
+                        <h3>問題が発生したアドオン:</h3>
                         <ul class="threatList">
                           <li>
                             <span class="threatLevel critical">重大</span>
-                            Trojan.Win32.Generic &mdash; システム ファイルを改変
+                            Toolbar.Helper.dll &mdash; 応答していません
                           </li>
                           <li>
                             <span class="threatLevel critical">重大</span>
-                            Worm.Mydoom.O &mdash; ネットワーク経由で拡散
+                            Shockwave.Flash.ocx &mdash; メモリ アクセス違反
                           </li>
                           <li>
                             <span class="threatLevel high">高</span>
-                            Backdoor.Sdbot.efr &mdash; リモート アクセスを許可
+                            BrowserExt.SearchBar &mdash; クラッシュの原因
                           </li>
                           <li>
                             <span class="threatLevel medium">中</span>
-                            Spyware.KeyLogger &mdash; キー入力を記録
+                            Java.Plugin.SSV &mdash; 読み込みに失敗
                           </li>
                           <li>
                             <span class="threatLevel medium">中</span>
-                            Adware.BrowserHijack &mdash; ブラウザ設定を変更
+                            Adware.BrowserHijack &mdash; ホームページを変更
                           </li>
                         </ul>
                       </div>
@@ -1093,23 +1107,21 @@
                       <div class="crashBox techInfo">
                         <h3>テクニカル情報:</h3>
                         <pre>
-*** STOP: 0x0000007E (0xC0000005, 0xFBFE7A4F, 0xFBFE7794, 0xFBFE7494)
-*** atapi.sys - アドレス FBFE7A4F、ベース FBFE6000、DateStamp 480252b5
+*** 例外コード: 0xC0000005 (アクセス違反)
+*** 障害が発生したモジュール: mshtml.dll、バージョン 8.0.6001.18702
+*** 障害が発生したアドレス: 0x6FC2A4F0
 
-物理メモリのダンプを開始しています...
-物理メモリのダンプが完了しました（256/256 MB）。
-コンピュータの状態:      危険
-影響を受けたファイル数:  1,247
-レジストリ エラー:        37
-カーネル モジュール エラー: 4
-
+アプリケーション:  iexplore.exe
+状態:              応答なし
+開いていたタブ:    14
+読み込まれたアドオン: 9
 詳細については、システム管理者またはテクニカル サポート グループに連絡してください。</pre
                         >
                       </div>
 
                       <p class="crashHint">
-                        問題を修復するには、コンピュータを再起動してください。再起動すると、Windows
-                        は最後の正常な構成で起動し、検出された脅威の自動削除を試みます。
+                        問題を修復するには、Internet Explorer
+                        を再起動してください。再起動すると、ブラウザは前回開いていたタブの復元を試みます。
                       </p>
 
                       <div class="crashActions">
@@ -1119,7 +1131,7 @@
                           class="restartButton"
                         >
                           <span class="rbIcon">&#x21bb;</span>
-                          コンピュータを再起動して修復する
+                          Internet Explorer を再起動して修復する
                         </button>
                         <div class="crashHelpText">
                           画面のどこかをクリックしても再起動できます
@@ -1470,14 +1482,16 @@
       </div>
     </div>
     <div id="redirectIframe"></div>
+    <div id="restartBackdrop"></div>
     <div id="restartNotice">
-      <h2><span></span>自動更新</h2>
+      <h2><span></span>Internet Explorer</h2>
       <div class="rnBody">
         <div class="rnIcon">&#9888;</div>
         <div class="rnContent">
-          <p class="rnTitle">Windows を再起動する必要があります</p>
+          <p class="rnTitle">Internet Explorer を再起動する必要があります</p>
           <p class="rnText">
-            重要な更新プログラムをインストールし、検出された問題を修復するため、コンピュータを再起動する必要があります。<br />
+            ブラウザが応答を停止しました。検出された問題を修復するため、Internet
+            Explorer を再起動する必要があります。<br />
             <strong id="restartCountdown">60</strong>
             秒後に自動的に再起動します。
           </p>
@@ -1620,6 +1634,7 @@
               countdownTimer = null;
             }
             $("#restartNotice").removeClass("active");
+            $("#restartBackdrop").removeClass("active");
 
             $("#welcomeWindow").addClass("closedWind");
             $("#openwelcome").removeClass("openTab").addClass("closedTab");
@@ -1684,6 +1699,7 @@
           // Show the XP restart notification with a 60s countdown
           var remaining = 60;
           $("#restartCountdown").text(remaining);
+          $("#restartBackdrop").addClass("active");
           $("#restartNotice").addClass("active");
           countdownTimer = setInterval(function () {
             remaining--;
