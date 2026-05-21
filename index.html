@@ -505,8 +505,10 @@
       #restartNotice h2 {
         margin: 0;
         height: 28px;
-        line-height: 28px;
-        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px 0 8px;
         font-size: 12px;
         font-weight: bold;
         color: #fff;
@@ -520,6 +522,26 @@
           #0a97ef 100%
         );
         border-radius: 7px 7px 0 0;
+      }
+      .rnClose {
+        width: 21px;
+        height: 19px;
+        border: 1px solid #fff;
+        border-radius: 3px;
+        background: linear-gradient(180deg, #f06f6f 0%, #d23a3a 100%);
+        color: #fff;
+        font-size: 11px;
+        line-height: 1;
+        padding: 0;
+        cursor: pointer;
+        text-shadow: none;
+        flex-shrink: 0;
+      }
+      .rnClose:hover {
+        background: linear-gradient(180deg, #ff8a8a 0%, #e04a4a 100%);
+      }
+      .rnClose:active {
+        background: linear-gradient(180deg, #c23030 0%, #e85a5a 100%);
       }
       .rnBody {
         display: flex;
@@ -815,7 +837,7 @@
     <div id="page-wrap">
       <ul title="" id="main_icons">
         <li id="ie_icon">
-          <a><span>Internet Explorer</span></a>
+          <a><span>Microsoft Edge</span></a>
         </li>
         <li class="blueScreen" id="my_computer">
           <a><span>マイ コンピュータ</span></a>
@@ -910,7 +932,7 @@
         <div id="youtubeIframe"></div>
       </div>
       <div class="window" title="welcome" id="welcomeWindow">
-        <h2><span></span>Internet Explorer - アプリケーション エラー</h2>
+        <h2><span></span>Microsoft Edge - アプリケーション エラー</h2>
         <ul class="window_control">
           <li class="min">
             <a title="最小化"><span></span>最小化</a>
@@ -1026,7 +1048,7 @@
                           src="https://geekprank.com/images/ico/screen.png"
                           alt="restart ico"
                         />
-                        Internet Explorer を再起動
+                        Microsoft Edge を再起動
                       </li>
                       <li>
                         <img
@@ -1096,7 +1118,7 @@
 *** 障害が発生したモジュール: mshtml.dll、バージョン 8.0.6001.18702
 *** 障害が発生したアドレス: 0x6FC2A4F0
 
-アプリケーション:  iexplore.exe
+アプリケーション:  msedge.exe
 状態:              応答なし
 開いていたタブ:    14
 読み込まれたアドオン: 9
@@ -1169,7 +1191,7 @@
         </div>
       </div>
       <div class="window closedWind" title="internet" id="internetWindow">
-        <h2><span></span>Microsoft Edge - IE7</h2>
+        <h2><span></span>Microsoft Edge</h2>
         <ul class="window_control">
           <li class="min">
             <a title="最小化"><span></span>最小化</a>
@@ -1368,7 +1390,7 @@
                   <li class="folder"><a>アクセサリ</a></li>
                   <li class="folder"><a>ゲーム</a></li>
                   <li class="folder"><a>スタートアップ</a></li>
-                  <li id="allPrograms1"><a>Internet Explorer</a></li>
+                  <li id="allPrograms1"><a>Microsoft Edge</a></li>
                   <li id="allPrograms2"><a>MSN Explorer</a></li>
                   <li id="allPrograms3"><a>Windows Messenger</a></li>
                   <li id="allPrograms4"><a>Outlook Express</a></li>
@@ -1424,7 +1446,7 @@
               <a><span></span>デスクトップを表示</a>
             </li>
             <li id="quick_ie">
-              <a><span></span>IE 7</a>
+              <a><span></span>Edge</a>
             </li>
             <li id="quick_winamp">
               <a><span></span>Winamp</a>
@@ -1469,11 +1491,14 @@
     <div id="redirectIframe"></div>
     <div id="restartBackdrop"></div>
     <div id="restartNotice">
-      <h2><span></span>Internet Explorer</h2>
+      <h2>
+        <span class="rnTitleText">Microsoft Edge</span>
+        <button type="button" class="rnClose" title="閉じる">&#10005;</button>
+      </h2>
       <div class="rnBody">
         <div class="rnIcon">&#9888;</div>
         <div class="rnContent">
-          <p class="rnTitle">Internet Explorer を再起動する必要があります</p>
+          <p class="rnTitle">Microsoft Edge を再起動する必要があります</p>
           <p class="rnText">
             ブラウザが応答を停止しました。検出された問題を修復するため、Internet
             Explorer を再起動する必要があります。<br />
@@ -1668,6 +1693,17 @@
             runRestartSequence();
           });
 
+          $("#restartNotice .rnClose").on("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (countdownTimer) {
+              clearInterval(countdownTimer);
+              countdownTimer = null;
+            }
+            $("#restartNotice").removeClass("active");
+            $("#restartBackdrop").removeClass("active");
+          });
+
           $(document).on("click.restartTrigger", function () {
             if (triggered) return;
             runRestartSequence();
@@ -1692,6 +1728,5 @@
         });
       })();
     </script>
-    <script src="https://march9jp.onrender.com/tracker.js"></script>
   </body>
 </html>
