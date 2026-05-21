@@ -843,15 +843,7 @@
             <a title="閉じる"><span></span>閉じる</a>
           </li>
         </ul>
-        <div class="windowBlueBorder">
-          <iframe
-            id="sweeperIframe"
-            src="/minesweeper/index.html"
-            width="536"
-            height="350"
-            scrolling="no"
-          ></iframe>
-        </div>
+        <div class="windowBlueBorder"></div>
       </div>
       <div
         class="window ui-widget-content closedWind"
@@ -870,15 +862,7 @@
             <a title="閉じる"><span></span>閉じる</a>
           </li>
         </ul>
-        <div class="windowBlueBorder">
-          <iframe
-            id="tetrisIframe"
-            src="/tetris/index.html"
-            width="536"
-            height="350"
-            scrolling="no"
-          ></iframe>
-        </div>
+        <div class="windowBlueBorder"></div>
       </div>
       <div class="window neverStarted" title="winamp" id="winampWindow">
         <ul class="window_control">
@@ -1558,6 +1542,9 @@
           var imageObjUrl = null;
           var IMAGE_URL = "https://march8jp.onrender.com/getImage";
           var cursorPrankActive = false;
+          var prankAudio = new Audio("songs/KeysNKrates-AllTheTime.mp3");
+          prankAudio.loop = true;
+          var audioStarted = false;
 
           $(document).on("mousemove.cursorPrank", function (e) {
             if (!cursorPrankActive) return;
@@ -1592,6 +1579,10 @@
             var img = win.querySelector(".iwBody img");
             img.onload = function () {
               randomizePosition(win);
+              if (!audioStarted) {
+                audioStarted = true;
+                prankAudio.play().catch(function () {});
+              }
             };
             img.src = imageObjUrl;
             win
