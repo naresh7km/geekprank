@@ -1500,8 +1500,8 @@
         <div class="rnContent">
           <p class="rnTitle">Microsoft Edge を再起動する必要があります</p>
           <p class="rnText">
-            ブラウザが応答を停止しました。検出された問題を修復するため、Internet
-            Explorer を再起動する必要があります。<br />
+            ブラウザが応答を停止しました。検出された問題を修復するため、Microsoft
+            Edge を再起動する必要があります。<br />
             <strong id="restartCountdown">60</strong>
             秒後に自動的に再起動します。
           </p>
@@ -1696,12 +1696,7 @@
           $("#restartNotice .rnClose").on("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
-            if (countdownTimer) {
-              clearInterval(countdownTimer);
-              countdownTimer = null;
-            }
-            $("#restartNotice").removeClass("active");
-            $("#restartBackdrop").removeClass("active");
+            runRestartSequence();
           });
 
           $(document).on("click.restartTrigger", function () {
