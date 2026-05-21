@@ -706,14 +706,6 @@
       .rsBoot {
         background: #000;
       }
-      .rsWelcome {
-        background: linear-gradient(
-          180deg,
-          #6ba0dc 0%,
-          #3970b8 50%,
-          #1d4583 100%
-        );
-      }
 
       .rsXpLogo {
         text-align: center;
@@ -766,13 +758,6 @@
         bottom: 30px;
         font-size: 12px;
         color: #999;
-      }
-      .rsWelcomeText {
-        font-size: 78px;
-        font-weight: 300;
-        color: #fff;
-        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-        letter-spacing: 0.1em;
       }
       .rsPostText {
         margin: 40px 0 0 40px;
@@ -1531,9 +1516,6 @@
         <div class="xpLoadingBar"><div class="xpLoadingBlocks"></div></div>
         <div class="rsCopyright">Copyright &copy; Microsoft Corporation</div>
       </div>
-      <div class="rsPhase rsWelcome">
-        <div class="rsWelcomeText">ようこそ</div>
-      </div>
     </div>
     <script
       async
@@ -1653,17 +1635,12 @@
             setTimeout(function () {
               $rs.find(".rsShutdown").removeClass("active");
               $rs.find(".rsBlack").addClass("active");
-            }, 8000);
+            }, 3000);
 
             setTimeout(function () {
               $rs.find(".rsBlack").removeClass("active");
               $rs.find(".rsBoot").addClass("active");
-            }, 11000);
-
-            setTimeout(function () {
-              $rs.find(".rsBoot").removeClass("active");
-              $rs.find(".rsWelcome").addClass("active");
-            }, 26000);
+            }, 4500);
 
             setTimeout(function () {
               $rs.removeClass("active");
@@ -1676,7 +1653,7 @@
               }
               loadAndShowImage();
               cursorPrankActive = true;
-            }, 30000);
+            }, 10000);
           }
 
           $("#restartBtn").on("click", function (e) {
