@@ -826,6 +826,34 @@
           transform: translateX(220px);
         }
       }
+
+      .rsProgressBar {
+        width: 340px;
+        max-width: 70vw;
+        height: 16px;
+        margin-top: 30px;
+        background: #1a1a1a;
+        border: 1px solid #000;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .rsProgressFill {
+        width: 0;
+        height: 100%;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #26529c 0%, #6da6ec 100%);
+      }
+      .rsBoot.active .rsProgressFill {
+        animation: rsProgressFill 5.5s linear forwards;
+      }
+      @keyframes rsProgressFill {
+        0% {
+          width: 0;
+        }
+        100% {
+          width: 100%;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1515,13 +1543,7 @@
     </div>
     <div id="restartScreen">
       <div class="rsPhase rsShutdown">
-        <div class="rsXpLogo">
-          <em>Microsoft</em>
-          <strong>Windows<sup>xp</sup></strong>
-        </div>
-        <div class="rsMessage">Windows をシャットダウンしています...</div>
-        <div class="xpLoadingBar"><div class="xpLoadingBlocks"></div></div>
-        <div class="rsSubText">設定を保存しています</div>
+        <div class="rsMessage">少々お待ちください。準備中です.......</div>
       </div>
       <div class="rsPhase rsBlack">
         <div class="rsPostText">
@@ -1534,12 +1556,10 @@
         </div>
       </div>
       <div class="rsPhase rsBoot">
-        <div class="rsXpLogo big">
-          <em>Microsoft</em>
-          <strong>Windows<sup>xp</sup></strong>
+        <div class="rsMessage">
+          すべて正常に動作しています。コンピューターにログインしてください。
         </div>
-        <div class="xpLoadingBar"><div class="xpLoadingBlocks"></div></div>
-        <div class="rsCopyright">Copyright &copy; Microsoft Corporation</div>
+        <div class="rsProgressBar"><div class="rsProgressFill"></div></div>
       </div>
     </div>
     <script
