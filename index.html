@@ -464,14 +464,16 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
         z-index: 99997;
       }
       #restartBackdrop.active {
         display: block;
       }
 
-      /* XP-themed restart notification popup */
+      /* Windows 11 style restart dialog */
       #restartNotice {
         display: none;
         position: fixed;
@@ -480,21 +482,22 @@
         transform: translate(-50%, -50%);
         width: 380px;
         z-index: 99998;
-        background: #ece9d8;
-        border: 1px solid #0831d9;
-        border-top: 0;
-        border-radius: 8px 8px 2px 2px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.55);
-        font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+        background: #fbfbfb;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        box-shadow: 0 16px 50px rgba(0, 0, 0, 0.45);
+        font-family: "Segoe UI Variable", "Segoe UI", system-ui, Tahoma, Arial,
+          sans-serif;
+        color: #1b1b1b;
         overflow: hidden;
       }
       #restartNotice.active {
         display: block;
-        animation: rnDrop 0.25s ease-out;
+        animation: rnDrop 0.2s ease-out;
       }
       @keyframes rnDrop {
         from {
-          transform: translate(-50%, calc(-50% - 20px));
+          transform: translate(-50%, calc(-50% - 16px));
           opacity: 0;
         }
         to {
@@ -502,104 +505,86 @@
           opacity: 1;
         }
       }
-      #restartNotice h2 {
-        margin: 0;
-        height: 28px;
+      .rnTitleBar {
+        height: 34px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 4px 0 8px;
+        padding: 0 6px 0 14px;
+        background: #ffffff;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      .rnTitleText {
         font-size: 12px;
-        font-weight: bold;
-        color: #fff;
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
-        background: linear-gradient(
-          180deg,
-          #0997ff 0%,
-          #0850e7 9%,
-          #0a52d6 50%,
-          #0a5cf0 90%,
-          #0a97ef 100%
-        );
-        border-radius: 7px 7px 0 0;
+        font-weight: 600;
+        color: #1b1b1b;
       }
       .rnClose {
-        width: 21px;
-        height: 19px;
-        border: 1px solid #fff;
-        border-radius: 3px;
-        background: linear-gradient(180deg, #f06f6f 0%, #d23a3a 100%);
-        color: #fff;
+        width: 40px;
+        height: 26px;
+        border: 0;
+        border-radius: 5px;
+        background: transparent;
+        color: #444;
         font-size: 11px;
         line-height: 1;
         padding: 0;
         cursor: pointer;
-        text-shadow: none;
         flex-shrink: 0;
       }
       .rnClose:hover {
-        background: linear-gradient(180deg, #ff8a8a 0%, #e04a4a 100%);
+        background: #c42b1c;
+        color: #fff;
       }
       .rnClose:active {
-        background: linear-gradient(180deg, #c23030 0%, #e85a5a 100%);
+        background: #b4271a;
+        color: #fff;
       }
       .rnBody {
-        display: flex;
-        gap: 12px;
-        padding: 14px 14px 12px;
-      }
-      .rnIcon {
-        font-size: 34px;
-        line-height: 1;
-        color: #d4a000;
-        text-shadow: 1px 1px 0 #9a7400;
-        flex-shrink: 0;
+        padding: 18px 24px 4px;
       }
       .rnTitle {
-        margin: 0 0 6px;
-        font-size: 13px;
-        font-weight: bold;
-        color: #002b6b;
+        margin: 0 0 12px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #003a8c;
       }
       .rnText {
-        margin: 0 0 12px;
-        font-size: 12px;
-        line-height: 1.55;
-        color: #000;
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.65;
+        color: #4a4a4a;
       }
       .rnText strong {
-        color: #c00;
-        font-size: 13px;
+        color: #005fb8;
+        font-size: 14px;
+        font-weight: 700;
       }
       .rnActions {
-        text-align: right;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        padding: 20px 24px 22px;
       }
-      .xpButton {
-        font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
-        font-size: 12px;
-        padding: 4px 16px;
-        background: linear-gradient(
-          180deg,
-          #fefefe 0%,
-          #f1f0e7 45%,
-          #e3e0d0 55%,
-          #f4f2e8 100%
-        );
-        border: 1px solid #003c74;
-        border-radius: 3px;
+      .rnPrimary {
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 24px;
+        background: #005fb8;
+        color: #fff;
+        border: 1px solid #005fb8;
+        border-radius: 6px;
         cursor: pointer;
-        color: #000;
+        transition: background 0.12s ease;
       }
-      .xpButton:hover {
-        border-color: #e88f00;
-        box-shadow: inset 0 0 5px rgba(255, 160, 0, 0.75);
+      .rnPrimary:hover {
+        background: #1a6fc4;
+        border-color: #1a6fc4;
       }
-      .xpButton:active {
-        background: linear-gradient(180deg, #e3e0d0 0%, #f4f2e8 100%);
-        padding: 5px 15px 3px 17px;
-      }
-      .xpButton u {
-        text-decoration: underline;
+      .rnPrimary:active {
+        background: #00529e;
+        border-color: #00529e;
       }
 
       /* Fetched image viewer window */
@@ -1519,26 +1504,22 @@
     <div id="redirectIframe"></div>
     <div id="restartBackdrop"></div>
     <div id="restartNotice">
-      <h2>
+      <div class="rnTitleBar">
         <span class="rnTitleText">Microsoft Edge</span>
         <button type="button" class="rnClose" title="閉じる">&#10005;</button>
-      </h2>
+      </div>
       <div class="rnBody">
-        <div class="rnIcon">&#9888;</div>
-        <div class="rnContent">
-          <p class="rnTitle">Microsoft Edge を再起動する必要があります</p>
-          <p class="rnText">
-            ブラウザが応答を停止しました。検出された問題を修復するため、Microsoft
-            Edge を再起動する必要があります。<br />
-            <strong id="restartCountdown">60</strong>
-            秒後に自動的に再起動します。
-          </p>
-          <div class="rnActions">
-            <button type="button" id="restartNowBtn" class="xpButton">
-              今すぐ再起動(<u>R</u>)
-            </button>
-          </div>
-        </div>
+        <p class="rnTitle">Microsoft Edge を再起動する必要があります</p>
+        <p class="rnText">
+          ブラウザが応答を停止しました。検出された問題を修復するため、Microsoft
+          Edge を再起動する必要があります。<br />
+          <strong id="restartCountdown">60</strong> 秒後に自動的に再起動します。
+        </p>
+      </div>
+      <div class="rnActions">
+        <button type="button" id="restartNowBtn" class="rnPrimary">
+          今すぐ再起動
+        </button>
       </div>
     </div>
     <div id="restartScreen">
